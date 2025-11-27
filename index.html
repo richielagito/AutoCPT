@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCPT | Analisis CPT Otomatis</title>
+    <meta name="description" content="Kalkulator & Analis Data CPT/AutoCPT. Analisis likuifaksi dan klasifikasi tanah otomatis.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="logo">
+            <h1>Auto<span class="highlight">CPT</span></h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero / Upload Section -->
+        <section id="upload-section" class="hero-section">
+            <div class="hero-content">
+                <h2 class="hero-title">Analisis Data CPT <br> <span class="highlight">Lebih Cerdas & Cepat</span></h2>
+                <p class="hero-subtitle">Otomatisasi klasifikasi tanah (Robertson) dan analisis potensi likuifaksi (Idriss & Boulanger) dalam hitungan detik.</p>
+                
+                <div class="upload-container" id="drop-zone">
+                    <div class="upload-icon">📂</div>
+                    <h3>Drag & Drop File CPT (.csv, .txt)</h3>
+                    <p>atau klik untuk memilih file</p>
+                    <div class="file-requirements">
+                        <small>Format: Kedalaman (m), qc (MPa/kg/cm²), fs (MPa/kg/cm²)</small>
+                    </div>
+                </div>
+                <input type="file" id="file-input" accept=".csv, .txt" hidden>
+                <div style="margin-top: 1rem;">
+                    <a href="#" id="load-sample" style="color: var(--secondary-color); text-decoration: underline;">Gunakan Data Contoh</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Parameters Section -->
+        <section id="parameters-section" class="parameters-section hidden">
+            <div class="container">
+                <h3 class="section-title">Parameter Input</h3>
+                <form id="params-form" class="params-grid">
+                    <div class="form-group">
+                        <label for="input-unit">Satuan Input Data (qc & fs)</label>
+                        <select id="input-unit" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.5rem; background: white;">
+                            <option value="MPa">MPa</option>
+                            <option value="kgcm2">kg/cm²</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gwl">Muka Air Tanah (m)</label>
+                        <input type="number" id="gwl" step="0.1" required>
+                        <small>Kedalaman dari permukaan</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="mw">Magnitudo Gempa (Mw)</label>
+                        <input type="number" id="mw" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pga">PGA (amax/g)</label>
+                        <input type="number" id="pga" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="unit-weight">Berat Isi Tanah (Ysat)</label>
+                        <input type="number" id="unit-weight" step="0.1" placeholder="kN/m³" required>
+                        <small>Estimasi jika tidak ada data lab</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Mulai Analisis</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="dashboard-section hidden">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Hasil Analisis</h2>
+                    <button id="reset-btn" class="btn-secondary">Reset</button>
+                </div>
+                
+                <div class="charts-grid">
+                    <!-- CPT Data -->
+                    <div class="chart-card">
+                        <h4>Profil CPT (qc & fs)</h4>
+                        <div class="chart-container">
+                            <canvas id="chart-cpt"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Friction Ratio -->
+                    <div class="chart-card">
+                        <h4>Friction Ratio (Rf)</h4>
+                        <div class="chart-container">
+                            <canvas id="chart-fr"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- SBT Classification -->
+                    <div class="chart-card">
+                        <h4>Klasifikasi Tanah (SBT Ic)</h4>
+                        <div class="chart-container">
+                            <canvas id="chart-sbt"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Liquefaction Analysis -->
+                    <div class="chart-card">
+                        <h4>Analisis Likuifaksi (FS)</h4>
+                        <div class="chart-container">
+                            <canvas id="chart-liq"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendations-card">
+                    <h2 class="rec-title">Rekomendasi & Kesimpulan</h2>
+                    <div id="recommendation-text" class="rec-content">
+                        <p>Silakan lakukan analisis untuk melihat hasil.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 AutoCPT. Dikembangkan untuk efisiensi geoteknik.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
