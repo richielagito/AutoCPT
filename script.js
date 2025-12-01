@@ -5,6 +5,7 @@ const dashboardSection = document.getElementById('dashboard-section');
 const paramsForm = document.getElementById('params-form');
 
 let rawData = [];
+let currentAnalysisResults = [];
 
 dropZone.addEventListener('click', () => fileInput.click());
 
@@ -39,6 +40,14 @@ document.getElementById('load-sample').addEventListener('click', (e) => {
 
 document.getElementById('reset-btn').addEventListener('click', () => {
     location.reload();
+});
+
+document.getElementById('download-btn').addEventListener('click', () => {
+    if (currentAnalysisResults.length === 0) {
+        alert("Belum ada data analisis untuk diunduh.");
+        return;
+    }
+    downloadResults(currentAnalysisResults);
 });
 
 function loadSampleData() {
@@ -153,6 +162,7 @@ function runAnalysis() {
     const inputUnit = document.getElementById('input-unit').value;
 
     const processedData = processCPTData(rawData, gwl, mw, pga, unitWeight, inputUnit);
+    currentAnalysisResults = processedData;
     
     renderCharts(processedData);
     
@@ -208,7 +218,7 @@ function processCPTData(data, gwl, mw, pga, unitWeight, inputUnit) {
 
         // --- SBT (Robertson 1990/2010) ---
         const n = 1.0;  
-        const Cn = Math.pow((Pa / sigma_v_eff), n);
+        const Cn = Math.min(1.7, Math.pow((Pa / sigma_v_eff), n));
         const Qtn = ((qc_kPa - sigma_v) / Pa) * Cn;
 
         const Fr = (fs_kPa / (qc_kPa - sigma_v)) * 100;
@@ -491,4 +501,37 @@ function generateRecommendations(data) {
     } else {
         recDiv.innerHTML = issues.join('<hr class="rec-divider">');
     }
+}
+
+function downloadResults(data) {
+    const csvRows = [];
+    
+    const headers = ['Depth (m)', 'qc (MPa)', 'fs (MPa)', 'Friction Ratio (%)', 'Ic (SBT Index)', 'SBT Zone', 'FS (Liquefaction)', 'CSR', 'CRR'];
+    csvRows.push(headers.join(','));
+
+    data.forEach(row => {
+        const values = [
+            row.depth.toFixed(2),
+            row.qc.toFixed(2),
+            row.fs.toFixed(3),
+            row.Fr.toFixed(2),
+            row.Ic.toFixed(2),
+            `"${row.sbt}"`,
+            row.FS.toFixed(2),
+            row.CSR.toFixed(3),
+            row.CRR.toFixed(3)
+        ];
+        csvRows.push(values.join(','));
+    });
+
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'hasil_analisis_autocpt.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }

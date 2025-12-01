@@ -219,6 +219,29 @@ nav a:hover, nav a.active {
     transform: translateY(-1px);
 }
 
+.btn-secondary {
+    background-color: var(--surface-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #f1f5f9; /* Slate 100 */
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+}
+
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+}
+
 /* Dashboard Section */
 .dashboard-section {
     padding: var(--spacing-xl) var(--spacing-md);
