@@ -320,7 +320,7 @@ function renderCharts(data) {
             maintainAspectRatio: false,
             indexAxis: 'y', 
             scales: {
-                y: { reverse: true, title: { display: true, text: 'Kedalaman (m)' } },
+                y: { reverse: false, title: { display: true, text: 'Kedalaman (m)' } },
                 x: { position: 'bottom', title: { display: true, text: 'qc (MPa)' } },
                 x1: { position: 'top', title: { display: true, text: 'fs (MPa)' }, grid: { drawOnChartArea: false } }
             }
@@ -343,7 +343,7 @@ function renderCharts(data) {
             maintainAspectRatio: false,
             indexAxis: 'y',
             scales: {
-                y: { reverse: true, title: { display: true, text: 'Kedalaman (m)' } },
+                y: { reverse: false, title: { display: true, text: 'Kedalaman (m)' } },
                 x: { position: 'top', title: { display: true, text: 'Fr (%)' } }
             }
         }
@@ -365,7 +365,7 @@ function renderCharts(data) {
             maintainAspectRatio: false,
             indexAxis: 'y',
             scales: {
-                y: { reverse: true, title: { display: true, text: 'Kedalaman (m)' } },
+                y: { reverse: false, title: { display: true, text: 'Kedalaman (m)' } },
                 x: { position: 'top', title: { display: true, text: 'Ic (SBT Index)' } }
             },
             plugins: {
@@ -402,7 +402,7 @@ function renderCharts(data) {
             maintainAspectRatio: false,
             indexAxis: 'y',
             scales: {
-                y: { reverse: true, title: { display: true, text: 'Kedalaman (m)' } },
+                y: { reverse: false, title: { display: true, text: 'Kedalaman (m)' } },
                 x: { 
                     position: 'top', 
                     title: { display: true, text: 'FS' },
